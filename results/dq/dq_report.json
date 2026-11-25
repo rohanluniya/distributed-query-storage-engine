@@ -1,0 +1,38 @@
+{
+  "run_id": "ingest-local-s42",
+  "scale": "local",
+  "seed": 42,
+  "completed_at_utc": "2026-11-25T06:11:29Z",
+  "tables": {
+    "nation": {
+      "rows": 12,
+      "partitions": 1,
+      "snapshot_version": 1
+    },
+    "customer": {
+      "rows": 2000,
+      "partitions": 5,
+      "snapshot_version": 1
+    },
+    "orders": {
+      "raw_rows": 30450,
+      "deduplicated_rows": 30000,
+      "duplicates_removed": 450,
+      "partitions": 30,
+      "snapshot_version": 1
+    },
+    "lineitem": {
+      "rows": 120209,
+      "partitions": 30,
+      "snapshot_version": 1
+    }
+  },
+  "data_quality": {
+    "invalid_records_quarantined": 2,
+    "corrupt_parquet_fragments_quarantined": 1,
+    "reconciliation_orders_vs_lineitem_diff": 0.0,
+    "reconciliation_passed": true,
+    "hot_customer_id": 1,
+    "hot_customer_order_share": 0.2197
+  }
+}

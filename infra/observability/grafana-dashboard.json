@@ -1,0 +1,46 @@
+{
+  "title": "DQSE — Distributed Query & Storage Engine",
+  "uid": "dqse-overview-v1",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "10s",
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Healthy gRPC Workers",
+      "gridPos": {"x": 0, "y": 0, "w": 6, "h": 4},
+      "targets": [{"expr": "dqse_workers_healthy", "refId": "A"}]
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "Query Latency p50 / p95 (ms)",
+      "gridPos": {"x": 6, "y": 0, "w": 12, "h": 8},
+      "targets": [
+        {"expr": "histogram_quantile(0.50, rate(dqse_query_duration_ms_bucket[5m]))", "legendFormat": "p50", "refId": "A"},
+        {"expr": "histogram_quantile(0.95, rate(dqse_query_duration_ms_bucket[5m]))", "legendFormat": "p95", "refId": "B"}
+      ]
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "Arrow IPC Shuffle vs Spill-to-Disk Bytes",
+      "gridPos": {"x": 18, "y": 0, "w": 6, "h": 8},
+      "targets": [
+        {"expr": "rate(dqse_shuffle_bytes_total[5m])", "legendFormat": "shuffle B/s", "refId": "A"},
+        {"expr": "rate(dqse_spilled_bytes_total[5m])", "legendFormat": "spill B/s", "refId": "B"}
+      ]
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Task Retries & Cache Hit Rate",
+      "gridPos": {"x": 0, "y": 4, "w": 6, "h": 4},
+      "targets": [
+        {"expr": "increase(dqse_task_retries_total[5m])", "legendFormat": "retries", "refId": "A"},
+        {"expr": "rate(dqse_cache_events_total{outcome=\"hit\"}[5m])", "legendFormat": "cache hits/s", "refId": "B"}
+      ]
+    }
+  ]
+}

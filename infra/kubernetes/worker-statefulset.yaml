@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: dqse-worker
+  namespace: dqse
+spec:
+  serviceName: dqse-worker-headless
+  replicas: 3
+  selector:
+    matchLabels:
+      app: dqse-worker
+  template:
+    metadata:
+      labels:
+        app: dqse-worker
+    spec:
+      containers:
+        - name: worker
+          image: ghcr.io/ankdeshm/dqse-engine:1.0.0
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - "uv run python -m services.worker_server --worker-id $(hostname) --host 0.0.0.0 --port 18091 --spill-dir /tmp/spill --max-mem-mb 256"
+          ports:
+            - containerPort: 18091
+              name: grpc
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "512Mi"
+            limits:
+              cpu: "2"
+              memory: "1Gi"

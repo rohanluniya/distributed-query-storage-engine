@@ -1,0 +1,17 @@
+{
+  "type": "record",
+  "name": "DqQuarantineRecord",
+  "namespace": "io.dqse.quality.v1",
+  "doc": "Auditable quarantine record emitted whenever a corrupt Parquet fragment, bad schema, duplicate conflict, or constraint violation is rejected.",
+  "fields": [
+    {"name": "quarantine_id", "type": "string"},
+    {"name": "table_name", "type": "string"},
+    {"name": "source_path", "type": "string"},
+    {"name": "rule_code", "type": "string"},
+    {"name": "severity", "type": {"type": "enum", "name": "Severity", "symbols": ["WARN", "ERROR", "CRITICAL"]}},
+    {"name": "reason", "type": "string"},
+    {"name": "detected_at_utc", "type": "string"},
+    {"name": "record_sample_json", "type": ["null", "string"], "default": null},
+    {"name": "run_id", "type": "string"}
+  ]
+}

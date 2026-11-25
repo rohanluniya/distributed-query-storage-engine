@@ -1,0 +1,18 @@
+[package]
+name = "dqse-rust-worker"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "Container-buildable Rust + Apache Arrow + DataFusion + Tonic gRPC worker companion crate for DQSE."
+
+[dependencies]
+arrow = "55.0.0"
+datafusion = "55.0.0"
+prost = "0.13.5"
+tokio = { version = "1.44.0", features = ["macros", "rt-multi-thread", "signal"] }
+tonic = "0.13.0"
+tracing = "0.1.41"
+tracing-subscriber = { version = "0.3.19", features = ["json"] }
+
+[build-dependencies]
+tonic-build = "0.13.0"

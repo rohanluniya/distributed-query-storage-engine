@@ -1,0 +1,38 @@
+groups:
+  - name: dqse_cluster_alerts
+    rules:
+      - alert: DqseWorkerRingDegraded
+        expr: dqse_workers_healthy < 2
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "DQSE healthy gRPC worker count below redundancy threshold"
+          description: "Fewer than 2 workers remain active in the consistent-hash ring. Check worker heartbeats and see docs/incidents/runbook.md."
+
+      - alert: DqseHighTaskRetryRate
+        expr: increase(dqse_task_retries_total[5m]) > 5
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Elevated distributed task retry rate"
+          description: "More than 5 task retries occurred in the last 5 minutes. Investigate worker crashes, lease timeouts, or network partitions."
+
+      - alert: DqseSustainedSpillToDisk
+        expr: increase(dqse_spilled_bytes_total[5m]) > 104857600
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Workers spilling > 100 MiB to disk over 5m"
+          description: "Sustained memory pressure detected. Consider increasing DQSE_WORKER_MAX_MEM_MB or enabling two_phase_agg and skew_salting."
+
+      - alert: DqseQueryP95LatencyHigh
+        expr: histogram_quantile(0.95, rate(dqse_query_duration_ms_bucket[5m])) > 2500
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Distributed query p95 latency exceeded 2.5s SLO"
+          description: "Inspect physical DAG plans, partition pruning ratios, and cache hit rates."

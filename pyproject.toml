@@ -1,0 +1,71 @@
+[project]
+name = "distributed-query-storage-engine"
+version = "1.0.0"
+description = "Distributed analytical query and columnar storage engine with SQL planning, gRPC Arrow IPC exchange, consistent hashing, spill-to-disk, versioned caching, and fault recovery."
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "pyarrow==25.0.1",
+    "grpcio==1.85.1",
+    "grpcio-tools==1.85.1",
+    "protobuf>=7.35.1,<8.0.0",
+    "datafusion==55.0.0",
+    "duckdb==2.0.0",
+    "fastapi>=0.115.0,<1.0.0",
+    "uvicorn[standard]>=0.32.0,<1.0.0",
+    "pydantic>=2.10.0,<3.0.0",
+    "prometheus-client>=0.21.0,<1.0.0",
+    "opentelemetry-api>=1.29.0,<2.0.0",
+    "opentelemetry-sdk>=1.29.0,<2.0.0",
+    "requests>=2.32.0,<3.0.0",
+    "httpx>=0.28.0,<1.0.0",
+    "matplotlib>=3.9.0,<4.0.0",
+    "numpy>=2.1.0,<3.0.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.0,<9.0.0",
+    "hypothesis>=6.120.0,<7.0.0",
+    "ruff>=0.8.0,<1.0.0",
+    "mypy>=1.13.0,<2.0.0",
+    "types-requests>=2.32.0,<3.0.0",
+    "types-protobuf>=5.29.0,<7.0.0",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "-q --tb=short"
+markers = [
+    "unit: fast unit and property tests",
+    "contracts: gRPC and Avro schema contract tests",
+    "integration: multi-worker distributed execution and catalog tests",
+    "e2e: coordinator API, RBAC, and workbench tests",
+    "chaos: fault-injection and recovery drills",
+    "performance: benchmark smoke tests",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+exclude = ["services/proto_gen", ".venv", ".local_data", "rust_worker"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B", "SIM"]
+ignore = ["E501", "B008"]
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+warn_unused_ignores = true
+exclude = ["services/proto_gen/", "rust_worker/", "tests/"]
+
+[[tool.mypy.overrides]]
+module = "services.proto_gen.*"
+follow_imports = "skip"
+ignore_errors = true

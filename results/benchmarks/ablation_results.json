@@ -1,0 +1,49 @@
+{
+  "generated_at_utc": "2026-11-25T06:08:43.460407Z",
+  "scale": "local",
+  "ablations": {
+    "q2_pruning_vs_full_scan": {
+      "unoptimized_ms": 21.376,
+      "optimized_ms": 2.317,
+      "speedup_x": 9.23,
+      "unoptimized_rows_scanned": 30000,
+      "optimized_rows_scanned": 491,
+      "partitions_pruned": 29,
+      "partitions_total": 30,
+      "row_groups_pruned": 2,
+      "exact_match": true
+    },
+    "q1_two_phase_agg_vs_single_phase": {
+      "single_phase_ms": 140.576,
+      "two_phase_ms": 105.702,
+      "speedup_x": 1.33,
+      "single_phase_shuffle_bytes": 4346568,
+      "two_phase_shuffle_bytes": 93600,
+      "shuffle_reduction_pct": 97.85,
+      "exact_match": true
+    },
+    "q4_skew_salting_vs_unsalted": {
+      "unsalted_ms": 105.614,
+      "salted_ms": 119.035,
+      "salt_factor": 4,
+      "salted_stages": 3,
+      "unsalted_stages": 2,
+      "exact_match": true
+    },
+    "warm_cache_vs_cold": {
+      "cold_ms": 59.035,
+      "warm_ms": 1.445,
+      "speedup_x": 40.9,
+      "warm_cache_hit": true,
+      "exact_match": true
+    },
+    "q5_spill_to_disk_vs_in_memory": {
+      "in_memory_ms": 113.139,
+      "spill_mode_ms": 181.059,
+      "memory_cap_mb": 0.5,
+      "spilled_bytes": 835664,
+      "spill_files": 72,
+      "exact_match": true
+    }
+  }
+}

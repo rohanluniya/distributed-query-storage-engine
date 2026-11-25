@@ -1,0 +1,24 @@
+# Python & virtual environments
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+*.egg-info/
+
+# Local runtime state & temporary spill/data directories
+.local_data/
+.env
+*.log
+*.pid
+
+# Rust build artifacts
+rust_worker/target/
+
+# OS & editor files
+.DS_Store
+.vscode/
+.idea/

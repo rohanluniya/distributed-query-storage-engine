@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DQSE — Distributed Query &amp; Storage Engine Control Tower</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">DQ</div>
+      <div>
+        <h1>DQSE Control Tower</h1>
+        <p class="subtitle">Distributed Analytical SQL Engine · gRPC Arrow IPC · Consistent Hashing · Spill-to-Disk</p>
+      </div>
+    </div>
+    <div class="topbar-controls">
+      <span id="cluster-pill" class="pill pill-ok">Checking workers...</span>
+      <span id="freshness-pill" class="pill pill-muted">Freshness: —</span>
+      <label class="key-label" for="api-key-input">
+        <span>Role Key</span>
+        <select id="api-key-input" title="Local development RBAC sandbox key">
+          <option value="dev-admin-key-change-me">Admin (dev)</option>
+          <option value="dev-analyst-key-change-me" selected>Analyst (dev)</option>
+          <option value="dev-viewer-key-change-me">Viewer (dev)</option>
+        </select>
+      </label>
+      <button id="btn-invalidate-cache" class="btn btn-secondary" title="Broadcast CacheInvalidate RPC to Coordinator & Workers">Flush Cache</button>
+      <button id="btn-refresh" class="btn btn-secondary">Refresh</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- KPI Strip -->
+    <section class="kpi-grid" aria-label="Cluster Key Performance Indicators">
+      <article class="kpi-card">
+        <div class="kpi-label">gRPC Workers &amp; Hash Ring</div>
+        <div id="kpi-workers" class="kpi-value">—</div>
+        <div id="kpi-workers-sub" class="kpi-sub">Consistent-hash vnodes</div>
+      </article>
+      <article class="kpi-card">
+        <div class="kpi-label">Columnar Warehouse</div>
+        <div id="kpi-rows" class="kpi-value">—</div>
+        <div id="kpi-rows-sub" class="kpi-sub">Partitioned Parquet tables</div>
+      </article>
+      <article class="kpi-card">
+        <div class="kpi-label">Last Query Latency</div>
+        <div id="kpi-latency" class="kpi-value">—</div>
+        <div id="kpi-latency-sub" class="kpi-sub">End-to-end distributed</div>
+      </article>
+      <article class="kpi-card">
+        <div class="kpi-label">Pruning Efficiency</div>
+        <div id="kpi-pruning" class="kpi-value">—</div>
+        <div id="kpi-pruning-sub" class="kpi-sub">Partitions &amp; row groups skipped</div>
+      </article>
+      <article class="kpi-card">
+        <div class="kpi-label">Shuffle &amp; Spill Telemetry</div>
+        <div id="kpi-shuffle" class="kpi-value">—</div>
+        <div id="kpi-shuffle-sub" class="kpi-sub">Arrow IPC wire &amp; disk spill</div>
+      </article>
+      <article class="kpi-card">
+        <div class="kpi-label">Reference Engine Parity</div>
+        <div id="kpi-parity" class="kpi-value">—</div>
+        <div id="kpi-parity-sub" class="kpi-sub">DuckDB 2.0 &amp; DataFusion 55.0</div>
+      </article>
+    </section>
+
+    <!-- Primary Workbench Grid -->
+    <section class="workbench-grid">
+      <!-- Left: SQL Console & Results -->
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>Distributed SQL Workbench</h2>
+            <span class="panel-note">Executes live across Coordinator + multi-process gRPC Workers</span>
+          </div>
+          <div class="preset-bar" id="preset-bar">
+            <button class="chip active" data-preset="q1_filtered_agg">Q1 Filtered Agg</button>
+            <button class="chip" data-preset="q2_partition_pruned_point">Q2 Pruned Point</button>
+            <button class="chip" data-preset="q3_distributed_join_agg">Q3 3-Table Join</button>
+            <button class="chip" data-preset="q4_skewed_hotkey_agg">Q4 Skew Salt</button>
+            <button class="chip" data-preset="q5_low_memory_spill_agg">Q5 Spill-to-Disk</button>
+          </div>
+        </div>
+
+        <textarea id="sql-editor" class="sql-editor" rows="8" spellcheck="false"></textarea>
+
+        <div class="optimizer-bar">
+          <label><input type="checkbox" id="opt-proj" checked /> Projection Pushdown</label>
+          <label><input type="checkbox" id="opt-pred" checked /> Predicate Pushdown</label>
+          <label><input type="checkbox" id="opt-part" checked /> Partition Pruning</label>
+          <label><input type="checkbox" id="opt-2p" checked /> 2-Phase Agg</label>
+          <label><input type="checkbox" id="opt-skew" checked /> Skew Salting</label>
+          <label><input type="checkbox" id="opt-cache" /> Cache</label>
+          <label><input type="checkbox" id="opt-verify" checked /> Verify DuckDB + DataFusion</label>
+          <label class="mem-input">
+            Mem Cap (MB)
+            <input type="number" id="opt-mem" value="0" min="0" max="1024" step="0.5" />
+          </label>
+        </div>
+
+        <div class="action-bar">
+          <button id="btn-run" class="btn btn-primary">Run Distributed Query</button>
+          <button id="btn-explain" class="btn btn-secondary">EXPLAIN Plan &amp; DAG</button>
+          <span id="query-status-msg" class="status-text">Ready</span>
+        </div>
+
+        <div id="parity-banner" class="parity-banner hidden"></div>
+
+        <div class="table-wrap">
+          <table id="result-table" class="data-table">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Right: DAG Plan, Stage Gantt & Telemetry -->
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>Query Execution Profile &amp; DAG</h2>
+            <span id="profile-meta" class="panel-note">Run or EXPLAIN a query to inspect distributed stages</span>
+          </div>
+          <div class="tab-bar">
+            <button class="tab active" data-tab="tab-gantt">Stage Gantt</button>
+            <button class="tab" data-tab="tab-dag">Physical DAG</button>
+            <button class="tab" data-tab="tab-plans">Logical vs Optimized</button>
+          </div>
+        </div>
+
+        <div id="tab-gantt" class="tab-pane active">
+          <div id="rules-badges" class="badge-row"></div>
+          <div id="gantt-container" class="gantt-container">
+            <p class="empty-note">Waiting for first distributed query execution...</p>
+          </div>
+        </div>
+
+        <div id="tab-dag" class="tab-pane">
+          <pre id="physical-dag-pre" class="code-box">—</pre>
+        </div>
+
+        <div id="tab-plans" class="tab-pane">
+          <h3 class="subhead">Unoptimized Logical Plan</h3>
+          <pre id="logical-plan-pre" class="code-box">—</pre>
+          <h3 class="subhead">Optimized Logical Plan</h3>
+          <pre id="optimized-plan-pre" class="code-box">—</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom Grid: Workers & Catalog + Benchmarks & Chaos -->
+    <section class="lower-grid">
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>gRPC Workers, Memory Pools &amp; Catalog</h2>
+            <span class="panel-note">Live heartbeats, scan caches, and versioned Parquet snapshots</span>
+          </div>
+        </div>
+        <div id="workers-grid" class="workers-grid"></div>
+        <h3 class="subhead">Partitioned Warehouse Tables (SQLite Snapshot Catalog)</h3>
+        <div class="table-wrap compact">
+          <table id="catalog-table" class="data-table">
+            <thead>
+              <tr>
+                <th>Table</th>
+                <th>Snapshot</th>
+                <th>Partitioning</th>
+                <th>Rows</th>
+                <th>Partitions</th>
+                <th>Size</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>Head-to-Head Engine Benchmarks &amp; Fault Drills</h2>
+            <span class="panel-note">Measured parity vs DuckDB 2.0.0 &amp; Apache DataFusion 55.0.0</span>
+          </div>
+        </div>
+        <div id="benchmark-bars" class="benchmark-bars"></div>
+        <h3 class="subhead">Optimizer Ablation Proof &amp; Chaos Verification</h3>
+        <div id="ablation-chaos-summary" class="summary-cards"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,378 @@
+{
+  "generated_at_utc": "2026-11-25T06:02:31.934017Z",
+  "total_packages": 61,
+  "violations": [],
+  "dataset_license_compliance": {
+    "dataset": "clean-room synthetic order-analytics (orders, lineitem, customer, nation)",
+    "source_policy": "Original Apache-2.0 generator inspired by TPC-H schema shapes; does not embed TPC-H code/data or claim official audited TPC-H compliance.",
+    "territorial_or_commercial_restrictions": "None (Apache-2.0)"
+  },
+  "packages": [
+    {
+      "package": "annotated-doc",
+      "version": "0.0.6",
+      "license": "MIT",
+      "status": "approved"
+    },
+    {
+      "package": "annotated-types",
+      "version": "0.8.0",
+      "license": "MIT",
+      "status": "approved"
+    },
+    {
+      "package": "anyio",
+      "version": "4.16.0",
+      "license": "MIT",
+      "status": "approved"
+    },
+    {
+      "package": "certifi",
+      "version": "2026.10.23",
+      "license": "Mozilla Public License 2.0 (MPL 2.0)",
+      "status": "approved"
+    },
+    {
+      "package": "charset-normalizer",
+      "version": "3.5.2",
+      "license": "MIT",
+      "status": "approved"
+    },
+    {
+      "package": "click",
+      "version": "8.5.1",
+      "license": "BSD-3-Clause",
+      "status": "approved"
+    },
+    {
+      "package": "cloudpickle",
+      "version": "3.1.2",
+      "license": "BSD License",
+      "status": "approved"
+    },
+    {
+      "package": "contourpy",
+      "version": "1.4.0",
+      "license": "BSD-3-Clause",
+      "status": "approved"
+    },
+    {
+      "package": "cycler",
+      "version": "0.12.1",
+      "license": "BSD License",
+      "status": "approved"
+    },
+    {
+      "package": "datafusion",
+      "version": "55.0.0",
+      "license": "Apache Software License; OSI Approved",
+      "status": "approved"
+    },
+    {
+      "package": "duckdb",
+      "version": "2.0.0",
+      "license": "MIT License",
+      "status": "approved"
+    },
+    {
+      "package": "fastapi",
+      "version": "0.163.2",
+      "license": "MIT",
+      "status": "approved"
+    },
+    {
+      "package": "fonttools",
+      "version": "4.67.0",
+      "license": "MIT",
+      "status": "approved"
+    },
+    {
+      "package": "grpcio",
+      "version": "1.85.1",
+      "license": "Apache-2.0",
+      "status": "approved"
+    },
+    {
+      "package": "grpcio-tools",
+      "version": "1.85.1",
+      "license": "Apache-2.0",
+      "status": "approved"
+    },
+    {
+      "package": "h11",
+      "version": "0.16.0",
+      "license": "MIT License",
+      "status": "approved"
+    },
+    {
+      "package": "httpcore",
+      "version": "1.0.9",
+      "license": "BSD-3-Clause",
+      "status": "approved"
+    },
+    {
+      "package": "httptools",
+      "version": "0.9.0",
+      "license": "MIT",
+      "status": "approved"
+    },
+    {
+      "package": "httpx",
+      "version": "0.28.1",
+      "license": "BSD License",
+      "status": "approved"
+    },
+    {
+      "package": "hypothesis",
+      "version": "6.170.15",
+      "license": "MPL-2.0",
+      "status": "approved"
+    },
+    {
+      "package": "idna",
+      "version": "3.20",
+      "license": "BSD-3-Clause",
+      "status": "approved"
+    },
+    {
+      "package": "iniconfig",
+      "version": "2.3.1",
+      "license": "MIT",
+      "status": "approved"
+    },
+    {
+      "package": "kiwisolver",
+      "version": "1.5.1",
+      "license": "BSD License",
+      "status": "approved"
+    },
+    {
+      "package": "librt",
+      "version": "0.16.0",
+      "license": "MIT",
+      "status": "approved"
+    },
+    {
+      "package": "matplotlib",
+      "version": "3.11.2",
+      "license": "Python Software Foundation License",
+      "status": "approved"
+    },
+    {
+      "package": "mypy",
+      "version": "1.20.2",
+      "license": "MIT",
+      "status": "approved"
+    },
+    {
+      "package": "mypy_extensions",
+      "version": "1.2.0",
+      "license": "MIT",
+      "status": "approved"
+    },
+    {
+      "package": "numpy",
+      "version": "2.5.5",
+      "license": "BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0",
+      "status": "approved"
+    },
+    {
+      "package": "opentelemetry-api",
+      "version": "1.45.2",
+      "license": "Apache-2.0",
+      "status": "approved"
+    },
+    {
+      "package": "opentelemetry-sdk",
+      "version": "1.45.2",
+      "license": "Apache-2.0",
+      "status": "approved"
+    },
+    {
+      "package": "opentelemetry-semantic-conventions",
+      "version": "0.66b2",
+      "license": "Apache-2.0",
+      "status": "approved"
+    },
+    {
+      "package": "packaging",
+      "version": "26.3",
+      "license": "Apache-2.0 OR BSD-2-Clause",
+      "status": "approved"
+    },
+    {
+      "package": "pathspec",
+      "version": "1.1.1",
+      "license": "Mozilla Public License 2.0 (MPL 2.0)",
+      "status": "approved"
+    },
+    {
+      "package": "pillow",
+      "version": "13.0.0",
+      "license": "MIT-CMU",
+      "status": "approved"
+    },
+    {
+      "package": "pluggy",
+      "version": "1.7.0",
+      "license": "MIT License",
+      "status": "approved"
+    },
+    {
+      "package": "prometheus_client",
+      "version": "0.26.0",
+      "license": "Apache-2.0 AND BSD-2-Clause",
+      "status": "approved"
+    },
+    {
+      "package": "protobuf",
+      "version": "7.36.2",
+      "license": "3-Clause BSD License",
+      "status": "approved"
+    },
+    {
+      "package": "pyarrow",
+      "version": "25.0.1",
+      "license": "Apache-2.0",
+      "status": "approved"
+    },
+    {
+      "package": "pydantic",
+      "version": "2.14.3",
+      "license": "MIT",
+      "status": "approved"
+    },
+    {
+      "package": "pydantic_core",
+      "version": "2.50.4",
+      "license": "MIT",
+      "status": "approved"
+    },
+    {
+      "package": "Pygments",
+      "version": "2.21.0",
+      "license": "BSD-2-Clause",
+      "status": "approved"
+    },
+    {
+      "package": "pyparsing",
+      "version": "3.3.3",
+      "license": "MIT",
+      "status": "approved"
+    },
+    {
+      "package": "pytest",
+      "version": "8.4.2",
+      "license": "MIT License",
+      "status": "approved"
+    },
+    {
+      "package": "python-dateutil",
+      "version": "4.0.0",
+      "license": "BSD-3-Clause",
+      "status": "approved"
+    },
+    {
+      "package": "python-dotenv",
+      "version": "1.2.4",
+      "license": "BSD-3-Clause",
+      "status": "approved"
+    },
+    {
+      "package": "PyYAML",
+      "version": "6.0.3",
+      "license": "MIT License",
+      "status": "approved"
+    },
+    {
+      "package": "requests",
+      "version": "2.34.2",
+      "license": "Apache Software License",
+      "status": "approved"
+    },
+    {
+      "package": "ruff",
+      "version": "0.17.5",
+      "license": "MIT",
+      "status": "approved"
+    },
+    {
+      "package": "setuptools",
+      "version": "84.2.1",
+      "license": "MIT",
+      "status": "approved"
+    },
+    {
+      "package": "sortedcontainers",
+      "version": "2.4.0",
+      "license": "Apache Software License",
+      "status": "approved"
+    },
+    {
+      "package": "starlette",
+      "version": "1.10.0",
+      "license": "BSD-3-Clause",
+      "status": "approved"
+    },
+    {
+      "package": "types-protobuf",
+      "version": "6.32.1.20260221",
+      "license": "Apache-2.0",
+      "status": "approved"
+    },
+    {
+      "package": "types-requests",
+      "version": "2.33.0.20261030",
+      "license": "Apache-2.0",
+      "status": "approved"
+    },
+    {
+      "package": "typing-inspection",
+      "version": "0.4.5",
+      "license": "MIT",
+      "status": "approved"
+    },
+    {
+      "package": "typing_extensions",
+      "version": "4.16.0",
+      "license": "PSF-2.0",
+      "status": "approved"
+    },
+    {
+      "package": "tzdata",
+      "version": "2026.6",
+      "license": "Apache-2.0",
+      "status": "approved"
+    },
+    {
+      "package": "urllib3",
+      "version": "2.8.0",
+      "license": "MIT",
+      "status": "approved"
+    },
+    {
+      "package": "uvicorn",
+      "version": "0.54.0",
+      "license": "BSD-3-Clause",
+      "status": "approved"
+    },
+    {
+      "package": "uvloop",
+      "version": "0.23.0",
+      "license": "Apache Software License; MIT License",
+      "status": "approved"
+    },
+    {
+      "package": "watchfiles",
+      "version": "1.3.0",
+      "license": "MIT License",
+      "status": "approved"
+    },
+    {
+      "package": "websockets",
+      "version": "17.4",
+      "license": "BSD-3-Clause",
+      "status": "approved"
+    }
+  ]
+}

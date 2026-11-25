@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dqse-coordinator
+  namespace: dqse
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dqse-coordinator
+  template:
+    metadata:
+      labels:
+        app: dqse-coordinator
+    spec:
+      containers:
+        - name: coordinator
+          image: ghcr.io/ankdeshm/dqse-engine:1.0.0
+          imagePullPolicy: IfNotPresent
+          command: ["uv", "run", "uvicorn", "services.api:app", "--host", "0.0.0.0", "--port", "8090"]
+          ports:
+            - containerPort: 8090
+              name: http
+          env:
+            - name: DQSE_WORKERS
+              value: "worker-0=dqse-worker-0.dqse-worker-headless:18091,worker-1=dqse-worker-1.dqse-worker-headless:18091,worker-2=dqse-worker-2.dqse-worker-headless:18091"
+            - name: DQSE_DATA_DIR
+              value: "/data/warehouse"
+            - name: DQSE_CATALOG_DB
+              value: "/data/catalog.sqlite3"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8090
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "512Mi"
+            limits:
+              cpu: "2"
+              memory: "2Gi"

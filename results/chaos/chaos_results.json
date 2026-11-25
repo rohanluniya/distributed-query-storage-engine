@@ -1,0 +1,109 @@
+{
+  "generated_at_utc": "2026-11-25T06:16:31.260842Z",
+  "drills_total": 8,
+  "drills_passed": 8,
+  "drills": [
+    {
+      "drill_id": "CHAOS-01",
+      "name": "mid_query_worker_sigkill_recovery",
+      "passed": true,
+      "duration_ms": 613.23,
+      "evidence": {
+        "killed_worker": "worker-1",
+        "signal": "SIGKILL",
+        "task_retries": 4,
+        "surviving_workers": 2,
+        "duckdb_exact_match": true,
+        "datafusion_exact_match": true
+      }
+    },
+    {
+      "drill_id": "CHAOS-02",
+      "name": "worker_restart_and_consistent_hash_ring_rejoin",
+      "passed": true,
+      "duration_ms": 1277.06,
+      "evidence": {
+        "restarted_worker": "worker-1",
+        "healthy_workers_after": 3,
+        "total_vnodes": 192
+      }
+    },
+    {
+      "drill_id": "CHAOS-03",
+      "name": "duplicate_task_execution_idempotent_dedup",
+      "passed": true,
+      "duration_ms": 90.19,
+      "evidence": {
+        "duplicate_commits_ignored": 1,
+        "duckdb_exact_match": true,
+        "no_double_counting": true
+      }
+    },
+    {
+      "drill_id": "CHAOS-04",
+      "name": "tight_memory_cap_spill_to_disk_exactness",
+      "passed": true,
+      "duration_ms": 78.78,
+      "evidence": {
+        "memory_cap_mb": 0.04,
+        "spilled_bytes": 69720,
+        "spill_files": 24,
+        "orphaned_spill_files_after": 0,
+        "duckdb_exact_match": true,
+        "datafusion_exact_match": true
+      }
+    },
+    {
+      "drill_id": "CHAOS-05",
+      "name": "skewed_hotkey_salted_shuffle_mitigation",
+      "passed": true,
+      "duration_ms": 90.43,
+      "evidence": {
+        "hot_customer_id": 1,
+        "hot_customer_orders": 397,
+        "salt_factor": 4,
+        "stages_executed": 3,
+        "duckdb_exact_match": true
+      }
+    },
+    {
+      "drill_id": "CHAOS-06",
+      "name": "cache_epoch_invalidation_on_snapshot_mutation",
+      "passed": true,
+      "duration_ms": 84.35,
+      "evidence": {
+        "count_before_mutation": 2000,
+        "count_after_mutation": 2001,
+        "new_snapshot_version": 2,
+        "warm_hit_before_mutation": true,
+        "stale_read_prevented": true
+      }
+    },
+    {
+      "drill_id": "CHAOS-07",
+      "name": "active_query_cancellation_releases_leases",
+      "passed": true,
+      "duration_ms": 212.51,
+      "evidence": {
+        "query_id": "q-chaos-cancel-01",
+        "final_status": "CANCELLED",
+        "workers_notified": 3,
+        "active_tasks_after_cancel": 0
+      }
+    },
+    {
+      "drill_id": "CHAOS-08",
+      "name": "corrupt_parquet_and_schema_drift_quarantine",
+      "passed": true,
+      "duration_ms": 72.01,
+      "evidence": {
+        "corrupt_rejected": true,
+        "corrupt_reason": "Corrupt Parquet fragment: ArrowInvalid: Parquet magic bytes not found in footer. Either the file is corrupted or this is not a parquet file.",
+        "schema_drift_rejected": true,
+        "schema_reason": "Missing required columns: ['order_id', 'customer_id', 'order_status', 'total_price', 'order_date', 'order_month', 'order_priority', 'region_id', 'event_time', 'ingested_at', 'source_version']",
+        "total_quarantine_records": 5,
+        "healthy_table_still_exact": true
+      }
+    }
+  ]
+}

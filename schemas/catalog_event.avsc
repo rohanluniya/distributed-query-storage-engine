@@ -1,0 +1,20 @@
+{
+  "type": "record",
+  "name": "CatalogSnapshotEvent",
+  "namespace": "io.dqse.catalog.v1",
+  "doc": "Immutable table snapshot commit event emitted by the DQSE catalog upon ingestion, append, correction, or compaction.",
+  "fields": [
+    {"name": "event_id", "type": "string"},
+    {"name": "table_name", "type": "string"},
+    {"name": "snapshot_version", "type": "long"},
+    {"name": "operation", "type": {"type": "enum", "name": "CatalogOp", "symbols": ["CREATE", "APPEND", "OVERWRITE", "COMPACT", "CORRECTION", "ROLLBACK"]}},
+    {"name": "event_time_utc", "type": "string"},
+    {"name": "processing_time_utc", "type": "string"},
+    {"name": "rows_added", "type": "long"},
+    {"name": "rows_quarantined", "type": "long"},
+    {"name": "partition_count", "type": "int"},
+    {"name": "schema_version", "type": "int"},
+    {"name": "source_seed", "type": ["null", "int"], "default": null},
+    {"name": "idempotency_key", "type": "string"}
+  ]
+}

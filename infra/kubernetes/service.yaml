@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dqse-worker-headless
+  namespace: dqse
+spec:
+  clusterIP: None
+  selector:
+    app: dqse-worker
+  ports:
+    - name: grpc
+      port: 18091
+      targetPort: 18091
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dqse-coordinator
+  namespace: dqse
+spec:
+  type: ClusterIP
+  selector:
+    app: dqse-coordinator
+  ports:
+    - name: http
+      port: 8090
+      targetPort: 8090

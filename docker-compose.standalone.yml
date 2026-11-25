@@ -1,0 +1,33 @@
+services:
+  dqse-standalone:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.standalone
+    image: dqse-standalone:1.0.0
+    container_name: dqse-standalone
+    ports:
+      - "8090:8090"
+    environment:
+      DQSE_COORDINATOR_HOST: "0.0.0.0"
+      DQSE_COORDINATOR_PORT: "8090"
+      DQSE_DATA_DIR: "/app/.local_data/warehouse"
+      DQSE_CATALOG_DB: "/app/.local_data/catalog.sqlite3"
+      DQSE_SPILL_DIR: "/app/.local_data/spill"
+      DQSE_SCALE: "${DQSE_SCALE:-local}"
+      DQSE_API_KEY_ADMIN: "${DQSE_API_KEY_ADMIN:-dev-admin-key-change-me}"
+      DQSE_API_KEY_ANALYST: "${DQSE_API_KEY_ANALYST:-dev-analyst-key-change-me}"
+      DQSE_API_KEY_VIEWER: "${DQSE_API_KEY_VIEWER:-dev-viewer-key-change-me}"
+    volumes:
+      - dqse_standalone_data:/app/.local_data
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8090/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 4
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+
+volumes:
+  dqse_standalone_data:

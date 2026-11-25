@@ -1,0 +1,410 @@
+{
+  "generated_at_utc": "2026-11-25T06:08:47.926042Z",
+  "hardware": {
+    "os": "Darwin 24.6.0",
+    "arch": "arm64",
+    "cpu_cores": 14,
+    "ram_gib": 48.0,
+    "python": "3.12.8",
+    "pyarrow": "25.0.1",
+    "grpcio": "1.85.1",
+    "duckdb": "2.0.0",
+    "datafusion": "55.0.0"
+  },
+  "notes": "DQSE executes distributed multi-worker gRPC + Arrow IPC stages with network/IPC serialization overhead; DuckDB 2.0.0 and DataFusion 55.0.0 execute in-process on a single node for reference parity and overhead quantification.",
+  "profiles": {
+    "smoke": {
+      "scale": "smoke",
+      "iterations": 3,
+      "dataset": {
+        "orders_rows": 2000,
+        "lineitem_rows": 5907,
+        "customer_rows": 200,
+        "nation_rows": 12
+      },
+      "queries": {
+        "q1_filtered_agg": {
+          "dqse_p50_ms": 45.973,
+          "dqse_p95_ms": 58.301,
+          "duckdb_p50_ms": 5.328,
+          "datafusion_p50_ms": 1.936,
+          "rows_scanned": 4899,
+          "rows_returned": 15,
+          "partitions_total": 30,
+          "partitions_pruned": 5,
+          "row_groups_scanned": 88,
+          "row_groups_pruned": 0,
+          "shuffle_bytes": 93600,
+          "spilled_bytes": 0,
+          "spill_files": 0,
+          "peak_worker_mem_bytes": 2816,
+          "optimizer_rules": [
+            "predicate_pushdown",
+            "partition_pruning",
+            "projection_pushdown",
+            "two_phase_agg"
+          ],
+          "duckdb_exact_match": true,
+          "datafusion_exact_match": true
+        },
+        "q2_partition_pruned_point": {
+          "dqse_p50_ms": 3.391,
+          "dqse_p95_ms": 3.479,
+          "duckdb_p50_ms": 2.124,
+          "datafusion_p50_ms": 0.782,
+          "rows_scanned": 58,
+          "rows_returned": 12,
+          "partitions_total": 30,
+          "partitions_pruned": 29,
+          "row_groups_scanned": 1,
+          "row_groups_pruned": 0,
+          "shuffle_bytes": 0,
+          "spilled_bytes": 0,
+          "spill_files": 0,
+          "peak_worker_mem_bytes": 0,
+          "optimizer_rules": [
+            "predicate_pushdown",
+            "partition_pruning",
+            "projection_pushdown"
+          ],
+          "duckdb_exact_match": true,
+          "datafusion_exact_match": true
+        },
+        "q3_distributed_join_agg": {
+          "dqse_p50_ms": 53.157,
+          "dqse_p95_ms": 53.528,
+          "duckdb_p50_ms": 4.397,
+          "datafusion_p50_ms": 2.219,
+          "rows_scanned": 887,
+          "rows_returned": 20,
+          "partitions_total": 36,
+          "partitions_pruned": 20,
+          "row_groups_scanned": 16,
+          "row_groups_pruned": 0,
+          "shuffle_bytes": 184920,
+          "spilled_bytes": 0,
+          "spill_files": 0,
+          "peak_worker_mem_bytes": 5120,
+          "optimizer_rules": [
+            "predicate_pushdown",
+            "partition_pruning",
+            "projection_pushdown",
+            "two_phase_agg"
+          ],
+          "duckdb_exact_match": true,
+          "datafusion_exact_match": true
+        },
+        "q4_skewed_hotkey_agg": {
+          "dqse_p50_ms": 68.839,
+          "dqse_p95_ms": 72.429,
+          "duckdb_p50_ms": 4.166,
+          "datafusion_p50_ms": 1.403,
+          "rows_scanned": 2000,
+          "rows_returned": 15,
+          "partitions_total": 30,
+          "partitions_pruned": 0,
+          "row_groups_scanned": 30,
+          "row_groups_pruned": 0,
+          "shuffle_bytes": 249672,
+          "spilled_bytes": 0,
+          "spill_files": 0,
+          "peak_worker_mem_bytes": 34560,
+          "optimizer_rules": [
+            "predicate_pushdown",
+            "projection_pushdown",
+            "two_phase_agg",
+            "skew_salting"
+          ],
+          "duckdb_exact_match": true,
+          "datafusion_exact_match": true
+        },
+        "q5_low_memory_spill_agg": {
+          "dqse_p50_ms": 49.194,
+          "dqse_p95_ms": 50.825,
+          "duckdb_p50_ms": 3.795,
+          "datafusion_p50_ms": 1.845,
+          "rows_scanned": 3506,
+          "rows_returned": 25,
+          "partitions_total": 30,
+          "partitions_pruned": 12,
+          "row_groups_scanned": 62,
+          "row_groups_pruned": 0,
+          "shuffle_bytes": 132320,
+          "spilled_bytes": 69720,
+          "spill_files": 24,
+          "peak_worker_mem_bytes": 99008,
+          "optimizer_rules": [
+            "predicate_pushdown",
+            "partition_pruning",
+            "projection_pushdown",
+            "two_phase_agg"
+          ],
+          "duckdb_exact_match": true,
+          "datafusion_exact_match": true
+        }
+      }
+    },
+    "local": {
+      "scale": "local",
+      "iterations": 3,
+      "dataset": {
+        "orders_rows": 30000,
+        "lineitem_rows": 120209,
+        "customer_rows": 2000,
+        "nation_rows": 12
+      },
+      "queries": {
+        "q1_filtered_agg": {
+          "dqse_p50_ms": 105.646,
+          "dqse_p95_ms": 105.759,
+          "duckdb_p50_ms": 5.812,
+          "datafusion_p50_ms": 2.239,
+          "rows_scanned": 100487,
+          "rows_returned": 15,
+          "partitions_total": 30,
+          "partitions_pruned": 5,
+          "row_groups_scanned": 117,
+          "row_groups_pruned": 1,
+          "shuffle_bytes": 93600,
+          "spilled_bytes": 0,
+          "spill_files": 0,
+          "peak_worker_mem_bytes": 2816,
+          "optimizer_rules": [
+            "predicate_pushdown",
+            "partition_pruning",
+            "projection_pushdown",
+            "two_phase_agg"
+          ],
+          "duckdb_exact_match": true,
+          "datafusion_exact_match": true
+        },
+        "q2_partition_pruned_point": {
+          "dqse_p50_ms": 3.676,
+          "dqse_p95_ms": 3.726,
+          "duckdb_p50_ms": 2.377,
+          "datafusion_p50_ms": 0.981,
+          "rows_scanned": 491,
+          "rows_returned": 25,
+          "partitions_total": 30,
+          "partitions_pruned": 29,
+          "row_groups_scanned": 3,
+          "row_groups_pruned": 2,
+          "shuffle_bytes": 0,
+          "spilled_bytes": 0,
+          "spill_files": 0,
+          "peak_worker_mem_bytes": 0,
+          "optimizer_rules": [
+            "predicate_pushdown",
+            "partition_pruning",
+            "projection_pushdown"
+          ],
+          "duckdb_exact_match": true,
+          "datafusion_exact_match": true
+        },
+        "q3_distributed_join_agg": {
+          "dqse_p50_ms": 61.472,
+          "dqse_p95_ms": 61.493,
+          "duckdb_p50_ms": 5.24,
+          "datafusion_p50_ms": 2.381,
+          "rows_scanned": 11852,
+          "rows_returned": 20,
+          "partitions_total": 36,
+          "partitions_pruned": 20,
+          "row_groups_scanned": 71,
+          "row_groups_pruned": 2,
+          "shuffle_bytes": 1034944,
+          "spilled_bytes": 0,
+          "spill_files": 0,
+          "peak_worker_mem_bytes": 30048,
+          "optimizer_rules": [
+            "predicate_pushdown",
+            "partition_pruning",
+            "projection_pushdown",
+            "two_phase_agg"
+          ],
+          "duckdb_exact_match": true,
+          "datafusion_exact_match": true
+        },
+        "q4_skewed_hotkey_agg": {
+          "dqse_p50_ms": 120.579,
+          "dqse_p95_ms": 134.847,
+          "duckdb_p50_ms": 5.064,
+          "datafusion_p50_ms": 1.504,
+          "rows_scanned": 30000,
+          "rows_returned": 15,
+          "partitions_total": 30,
+          "partitions_pruned": 0,
+          "row_groups_scanned": 143,
+          "row_groups_pruned": 0,
+          "shuffle_bytes": 1255600,
+          "spilled_bytes": 0,
+          "spill_files": 0,
+          "peak_worker_mem_bytes": 406656,
+          "optimizer_rules": [
+            "predicate_pushdown",
+            "projection_pushdown",
+            "two_phase_agg",
+            "skew_salting"
+          ],
+          "duckdb_exact_match": true,
+          "datafusion_exact_match": true
+        },
+        "q5_low_memory_spill_agg": {
+          "dqse_p50_ms": 169.881,
+          "dqse_p95_ms": 176.2,
+          "duckdb_p50_ms": 4.243,
+          "datafusion_p50_ms": 2.042,
+          "rows_scanned": 72910,
+          "rows_returned": 25,
+          "partitions_total": 30,
+          "partitions_pruned": 12,
+          "row_groups_scanned": 86,
+          "row_groups_pruned": 0,
+          "shuffle_bytes": 862456,
+          "spilled_bytes": 835640,
+          "spill_files": 72,
+          "peak_worker_mem_bytes": 573440,
+          "optimizer_rules": [
+            "predicate_pushdown",
+            "partition_pruning",
+            "projection_pushdown",
+            "two_phase_agg"
+          ],
+          "duckdb_exact_match": true,
+          "datafusion_exact_match": true
+        }
+      }
+    },
+    "stress": {
+      "scale": "stress",
+      "iterations": 2,
+      "dataset": {
+        "orders_rows": 120000,
+        "lineitem_rows": 479147,
+        "customer_rows": 8000,
+        "nation_rows": 12
+      },
+      "queries": {
+        "q1_filtered_agg": {
+          "dqse_p50_ms": 295.645,
+          "dqse_p95_ms": 295.701,
+          "duckdb_p50_ms": 6.455,
+          "datafusion_p50_ms": 3.213,
+          "rows_scanned": 398908,
+          "rows_returned": 15,
+          "partitions_total": 30,
+          "partitions_pruned": 5,
+          "row_groups_scanned": 115,
+          "row_groups_pruned": 0,
+          "shuffle_bytes": 93600,
+          "spilled_bytes": 0,
+          "spill_files": 0,
+          "peak_worker_mem_bytes": 2816,
+          "optimizer_rules": [
+            "predicate_pushdown",
+            "partition_pruning",
+            "projection_pushdown",
+            "two_phase_agg"
+          ],
+          "duckdb_exact_match": true,
+          "datafusion_exact_match": true
+        },
+        "q2_partition_pruned_point": {
+          "dqse_p50_ms": 4.043,
+          "dqse_p95_ms": 4.109,
+          "duckdb_p50_ms": 2.534,
+          "datafusion_p50_ms": 1.062,
+          "rows_scanned": 2014,
+          "rows_returned": 25,
+          "partitions_total": 30,
+          "partitions_pruned": 29,
+          "row_groups_scanned": 2,
+          "row_groups_pruned": 2,
+          "shuffle_bytes": 0,
+          "spilled_bytes": 0,
+          "spill_files": 0,
+          "peak_worker_mem_bytes": 0,
+          "optimizer_rules": [
+            "predicate_pushdown",
+            "partition_pruning",
+            "projection_pushdown"
+          ],
+          "duckdb_exact_match": true,
+          "datafusion_exact_match": true
+        },
+        "q3_distributed_join_agg": {
+          "dqse_p50_ms": 86.796,
+          "dqse_p95_ms": 87.228,
+          "duckdb_p50_ms": 5.654,
+          "datafusion_p50_ms": 2.768,
+          "rows_scanned": 47756,
+          "rows_returned": 20,
+          "partitions_total": 36,
+          "partitions_pruned": 20,
+          "row_groups_scanned": 73,
+          "row_groups_pruned": 0,
+          "shuffle_bytes": 3823944,
+          "spilled_bytes": 0,
+          "spill_files": 0,
+          "peak_worker_mem_bytes": 117120,
+          "optimizer_rules": [
+            "predicate_pushdown",
+            "partition_pruning",
+            "projection_pushdown",
+            "two_phase_agg"
+          ],
+          "duckdb_exact_match": true,
+          "datafusion_exact_match": true
+        },
+        "q4_skewed_hotkey_agg": {
+          "dqse_p50_ms": 298.289,
+          "dqse_p95_ms": 299.664,
+          "duckdb_p50_ms": 5.418,
+          "datafusion_p50_ms": 2.066,
+          "rows_scanned": 120000,
+          "rows_returned": 15,
+          "partitions_total": 30,
+          "partitions_pruned": 0,
+          "row_groups_scanned": 143,
+          "row_groups_pruned": 0,
+          "shuffle_bytes": 4508920,
+          "spilled_bytes": 0,
+          "spill_files": 0,
+          "peak_worker_mem_bytes": 1553472,
+          "optimizer_rules": [
+            "predicate_pushdown",
+            "projection_pushdown",
+            "two_phase_agg",
+            "skew_salting"
+          ],
+          "duckdb_exact_match": true,
+          "datafusion_exact_match": true
+        },
+        "q5_low_memory_spill_agg": {
+          "dqse_p50_ms": 515.665,
+          "dqse_p95_ms": 517.496,
+          "duckdb_p50_ms": 4.911,
+          "datafusion_p50_ms": 3.008,
+          "rows_scanned": 288123,
+          "rows_returned": 25,
+          "partitions_total": 30,
+          "partitions_pruned": 12,
+          "row_groups_scanned": 82,
+          "row_groups_pruned": 0,
+          "shuffle_bytes": 3185808,
+          "spilled_bytes": 3159032,
+          "spill_files": 72,
+          "peak_worker_mem_bytes": 2179072,
+          "optimizer_rules": [
+            "predicate_pushdown",
+            "partition_pruning",
+            "projection_pushdown",
+            "two_phase_agg"
+          ],
+          "duckdb_exact_match": true,
+          "datafusion_exact_match": true
+        }
+      }
+    }
+  }
+}

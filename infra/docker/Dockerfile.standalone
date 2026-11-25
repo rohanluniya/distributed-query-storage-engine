@@ -1,0 +1,40 @@
+FROM python:3.12.8-slim-bookworm
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    UV_LINK_MODE=copy
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/* \
+    && pip install --no-cache-dir uv==0.12.3
+
+WORKDIR /app
+
+COPY pyproject.toml uv.lock .python-version ./
+RUN uv sync --frozen --no-dev
+
+COPY apps ./apps
+COPY benchmarks ./benchmarks
+COPY ingestion ./ingestion
+COPY models ./models
+COPY processing ./processing
+COPY schemas ./schemas
+COPY scripts ./scripts
+COPY services ./services
+COPY sql ./sql
+
+RUN chmod +x /app/scripts/entrypoint_standalone.sh /app/scripts/run_portable.sh \
+    && useradd --create-home --shell /bin/bash dqse \
+    && mkdir -p /app/.local_data /app/results \
+    && chown -R dqse:dqse /app
+
+USER dqse
+
+EXPOSE 8090 18091 18092 18093
+
+HEALTHCHECK --interval=15s --timeout=5s --start-period=25s --retries=3 \
+    CMD curl -fsS http://127.0.0.1:8090/health || exit 1
+
+ENTRYPOINT ["/app/scripts/entrypoint_standalone.sh"]
