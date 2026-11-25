@@ -56,7 +56,7 @@ All benchmark runs execute with cold cache and assert numerical equivalence agai
 ### Option A: Zero-Docker Portable Local Cluster (macOS ARM64 / Linux, Python 3.12 + `uv`)
 
 ```bash
-git clone https://github.com/ankdeshm/distributed-query-storage-engine.git
+git clone https://github.com/rohanluniya/distributed-query-storage-engine.git
 cd distributed-query-storage-engine
 cp .env.example .env
 
